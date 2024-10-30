@@ -1,22 +1,17 @@
-# Используем базовый образ Golang
-FROM golang:1.18-alpine AS builder
-
-# Устанавливаем рабочую директорию
+FROM golang:1.17 AS build
 WORKDIR /app
 
-# Копируем файлы и устанавливаем зависимости
-COPY . .
+# Копируем модульные файлы и загружаем зависимости
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Сборка приложения
+# Копируем весь проект и выполняем сборку
+COPY . .
 RUN go build -o redpanda-console
 
-# Используем легковесный образ для финального контейнера
+# Создаем минимальный образ для запуска
 FROM alpine:latest
-WORKDIR /root/
-COPY --from=builder /app/redpanda-console .
+WORKDIR /app
+COPY --from=build /app/redpanda-console /app/
 
-# Открываем порт для приложения
-EXPOSE 8080
-
-# Запускаем приложение
 CMD ["./redpanda-console"]
