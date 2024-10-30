@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Скомпилируйте приложение (здесь можно указать имя выходного файла)
-RUN go build -o redpanda-console .
+RUN go build -t redpanda-console .
 
 # Укажите команду для запуска приложения
 CMD ["./redpanda-console"]
