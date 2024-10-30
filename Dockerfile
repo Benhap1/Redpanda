@@ -2,7 +2,7 @@ FROM golang:1.17 AS build
 WORKDIR /app
 
 # Копируем модульные файлы и загружаем зависимости
-COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod download
 
 # Копируем весь проект и выполняем сборку
