@@ -1,17 +1,14 @@
-FROM golang:1.17 AS build
+# Используйте официальный образ Golang
+FROM golang:1.17
+
+# Установите рабочую директорию
 WORKDIR /app
 
-# Копируем модульные файлы и загружаем зависимости
-COPY go.mod ./
-RUN go mod download
-
-# Копируем весь проект и выполняем сборку
+# Копируем весь проект (уберите go.mod и go.sum)
 COPY . .
-RUN go build -o redpanda-console
 
-# Создаем минимальный образ для запуска
-FROM alpine:latest
-WORKDIR /app
-COPY --from=build /app/redpanda-console /app/
+# Скомпилируйте приложение (здесь можно указать имя выходного файла)
+RUN go build -o redpanda-console .
 
+# Укажите команду для запуска приложения
 CMD ["./redpanda-console"]
